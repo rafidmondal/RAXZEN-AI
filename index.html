@@ -12,6 +12,8 @@ body{
   background:radial-gradient(circle at top,#6fe7c8,#000 75%);
   color:#fff;
   text-align:center;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* LOGO */
@@ -32,9 +34,15 @@ body{
 }
 
 /* SEARCH */
+.search-container {
+  position: relative;
+  width: 88%;
+  max-width: 520px;
+  margin: auto;
+}
+
 .search{
-  width:88%;
-  max-width:520px;
+  width: 100%;
   padding:16px;
   border-radius:30px;
   border:none;
@@ -42,6 +50,19 @@ body{
   background:#0f0f0f;
   color:#fff;
   font-size:16px;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Intense Red Blade Glow Animation */
+.search:focus {
+  box-shadow: 0 0 20px #ff0000, 0 0 40px rgba(255, 0, 0, 0.6);
+  animation: glow-pulse 1.5s infinite;
+}
+
+@keyframes glow-pulse {
+  0% { box-shadow: 0 0 15px #ff0000, 0 0 5px rgba(255, 0, 0, 0.4); }
+  50% { box-shadow: 0 0 30px #ff0000, 0 0 50px rgba(255, 0, 0, 0.8); }
+  100% { box-shadow: 0 0 15px #ff0000, 0 0 5px rgba(255, 0, 0, 0.4); }
 }
 
 /* SECTION TITLE */
@@ -68,6 +89,32 @@ h3{
   border:1px solid rgba(0,229,255,.35);
   box-shadow:0 0 10px rgba(0,229,255,.25);
   cursor:pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,229,255,0.4);
+}
+
+.btn-delete {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ff6b6b;
+  color: #fff;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 12px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:hover .btn-delete {
+  display: flex;
 }
 
 /* MODE BUTTON */
@@ -75,6 +122,92 @@ h3{
   background:linear-gradient(135deg,#00e5ff,#ff6b6b);
   color:#000;
   font-weight:600;
+}
+
+/* PROMPT LIBRARY PANEL */
+.prompt-section {
+  margin: 30px auto;
+  width: 92%;
+  max-width: 560px;
+  padding: 22px;
+  background: #0b0b0b;
+  border-radius: 22px;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  box-shadow: 0 0 18px rgba(0, 229, 255, 0.3);
+  display: none;
+}
+
+.prompt-tabs {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  scrollbar-width: none;
+}
+
+.p-tab {
+  padding: 8px 16px;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 20px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.p-tab.active {
+  background: #00e5ff;
+  color: #000;
+  border-color: #00e5ff;
+}
+
+.prompt-card {
+  background: #0a0a0a;
+  border: 1px solid #222;
+  border-radius: 15px;
+  padding: 15px;
+  text-align: left;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.prompt-card:hover {
+  border-color: #00e5ff;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+}
+
+.prompt-card h4 {
+  margin: 0 0 5px 0;
+  color: #ff6b6b;
+  font-size: 15px;
+}
+
+.prompt-card p {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.7;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* CHOOSE AI MENU */
+#ai-selector {
+  display: none;
+  margin-top: 20px;
+  padding: 15px;
+  background: #0f0f0f;
+  border-radius: 20px;
+  border: 1px solid #ff6b6b;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* MODE PANEL */
@@ -106,140 +239,514 @@ h3{
   opacity:.45;
   font-size:13px;
 }
+
+/* TAB MANAGER UI */
+#tab-manager {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #111;
+  display: none;
+  z-index: 1000;
+  flex-direction: column;
+  border-bottom: 1px solid #333;
+}
+
+.top-bar {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  gap: 10px;
+}
+
+.back-btn {
+  background: #222;
+  border: 1px solid #444;
+  color: #fff;
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.tabs-container {
+  display: flex;
+  overflow-x: auto;
+  flex-grow: 1;
+  gap: 5px;
+  scrollbar-width: none;
+}
+
+.tab {
+  background: #222;
+  padding: 5px 15px;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  white-space: nowrap;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  border: 1px solid #333;
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tab.active {
+  background: #333;
+  border-color: #00e5ff;
+}
+
+.close-tab {
+  font-weight: bold;
+  color: #ff6b6b;
+}
+
+/* CUSTOM AI FORM */
+.custom-ai-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.custom-ai-form input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #333;
+  background: #111;
+  color: #fff;
+}
+
+.save-btn {
+  background: linear-gradient(90deg, #00e5ff, #ff6b6b);
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* FLOATING BACK BUTTON */
+.main-back-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(15, 15, 15, 0.8);
+  border: 1px solid rgba(0, 229, 255, 0.5);
+  color: #fff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 900;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+}
+
+#toast {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff6b6b;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  display: none;
+  z-index: 2000;
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="logo">
-  <span class="a">RAX</span><span class="b">ZEN</span>
+<div id="toast">Prompt Copied!</div>
+
+<div id="main-ui">
+  <div class="logo">
+    <span class="a">RAX</span><span class="b">ZEN</span>
+  </div>
+  <div class="line"></div>
+
+  <div class="search-container">
+    <input id="searchBox" class="search" placeholder="Search or type your question">
+  </div>
+
+  <!-- CORE AI -->
+  <h3>Core AI</h3>
+  <div class="grid" id="coreGrid">
+    <div class="btn" onclick="openAI('https://chatgpt.com', 'ChatGPT')">ChatGPT</div>
+    <div class="btn" onclick="openAI('https://gemini.google.com', 'Gemini')">Gemini</div>
+    <div class="btn" onclick="openAI('https://www.perplexity.ai', 'Perplexity')">Perplexity</div>
+    <div class="btn" onclick="openAI('https://grok.com', 'Grok')">Grok</div>
+    <div class="btn" id="customAddBtn" onclick="show('custom')">⚙️ Add AI</div>
+  </div>
+
+  <!-- AI MODES -->
+  <h3>AI Modes</h3>
+  <div class="grid">
+    <div class="btn mode" onclick="show('study')">📘 Study</div>
+    <div class="btn mode" onclick="show('image')">🎨 Image</div>
+    <div class="btn mode" onclick="show('video')">🎬 Video</div>
+    <div class="btn mode" onclick="show('coding')">💻 Coding</div>
+    <div class="btn mode" onclick="show('voice')">🎧 Voice</div>
+    <div class="btn mode" onclick="show('movie')">🍿 Movie</div>
+    <div class="btn mode" style="background: linear-gradient(135deg, #ff6b6b, #00e5ff); color: #000;" onclick="togglePromptLibrary()">🚀 Prompt Library</div>
+  </div>
+
+  <!-- PROMPT LIBRARY PANEL -->
+  <div id="promptPanel" class="prompt-section">
+    <h3 style="margin-top:0; color:#00e5ff;">🚀 Prompt Library</h3>
+    <div class="prompt-tabs" id="pTabs">
+      <div class="p-tab active" onclick="filterP('all')">All</div>
+      <div class="p-tab" onclick="filterP('writing')">Writing</div>
+      <div class="p-tab" onclick="filterP('coding')">Coding</div>
+      <div class="p-tab" onclick="filterP('business')">Business</div>
+      <div class="p-tab" onclick="filterP('study')">Study</div>
+      <div class="p-tab" onclick="filterP('social')">Social Media</div>
+    </div>
+    <div id="promptList"></div>
+
+    <!-- AI Selector -->
+    <div id="ai-selector">
+      <p style="font-size:12px; margin-bottom:10px; color:#ff6b6b;">Prompt Copied! Choose AI to open:</p>
+      <div class="grid">
+        <div class="item" onclick="openAI('https://chatgpt.com', 'ChatGPT')">ChatGPT</div>
+        <div class="item" onclick="openAI('https://gemini.google.com', 'Gemini')">Gemini</div>
+        <div class="item" onclick="openAI('https://www.perplexity.ai', 'Perplexity')">Perplexity</div>
+        <div class="item" onclick="openAI('https://grok.com', 'Grok')">Grok</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODE PANEL -->
+  <div id="panel" class="panel">
+    <h3 id="panelTitle"></h3>
+    <div id="panelList" class="grid"></div>
+    
+    <!-- Custom AI Form -->
+    <div id="customForm" class="custom-ai-form" style="display:none;">
+      <input type="text" id="customName" placeholder="AI Name (e.g. My AI)">
+      <input type="text" id="customUrl" placeholder="URL (https://...)">
+      <button class="save-btn" onclick="saveCustomAI()">Save AI</button>
+    </div>
+  </div>
+
+  <!-- POPULAR AI -->
+  <h3>Popular AI Tools</h3>
+  <div class="grid" id="popularList"></div>
+
+  <div class="footer">Powered by RAXZEN</div>
 </div>
-<div class="line"></div>
 
-<input id="searchBox" class="search" placeholder="Search or type your question">
-
-<!-- CORE AI -->
-<h3>Core AI</h3>
-<div class="grid">
-  <div class="btn" onclick="openAI('https://chatgpt.com')">ChatGPT</div>
-  <div class="btn" onclick="openAI('https://gemini.google.com')">Gemini</div>
-  <div class="btn" onclick="openAI('https://www.perplexity.ai')">Perplexity</div>
-  <div class="btn" onclick="openAI('https://grok.com')">Grok</div>
+<!-- TAB MANAGER UI -->
+<div id="tab-manager">
+  <div class="top-bar">
+    <button class="back-btn" onclick="hideTabManager()">Home</button>
+    <div id="tabs" class="tabs-container"></div>
+    <button class="back-btn" onclick="addNewTabPrompt()">+</button>
+  </div>
 </div>
 
-<!-- AI MODES -->
-<h3>AI Modes</h3>
-<div class="grid">
-  <div class="btn mode" onclick="show('study')">📘 Study</div>
-  <div class="btn mode" onclick="show('image')">🎨 Image</div>
-  <div class="btn mode" onclick="show('video')">🎬 Video</div>
-  <div class="btn mode" onclick="show('coding')">💻 Coding</div>
-  <div class="btn mode" onclick="show('voice')">🎧 Voice</div>
-  <div class="btn mode" onclick="show('movie')">🍿 Movie</div>
+<!-- Floating Back Button -->
+<div class="main-back-btn" onclick="goBack()" title="Go Back">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
 </div>
-
-<!-- MODE PANEL -->
-<div id="panel" class="panel">
-  <h3 id="panelTitle"></h3>
-  <div id="panelList" class="grid"></div>
-</div>
-
-<!-- POPULAR AI -->
-<h3>Popular AI Tools</h3>
-<div class="grid">
-  <div class="btn" onclick="openAI('https://claude.ai')">Claude</div>
-  <div class="btn" onclick="openAI('https://www.deepseek.com')">DeepSeek</div>
-  <div class="btn" onclick="openAI('https://copilot.microsoft.com')">Copilot</div>
-  <div class="btn" onclick="openAI('https://www.midjourney.com')">Midjourney</div>
-  <div class="btn" onclick="openAI('https://leonardo.ai')">Leonardo AI</div>
-  <div class="btn" onclick="openAI('https://runwayml.com')">Runway</div>
-  <div class="btn" onclick="openAI('https://pika.art')">Pika</div>
-  <div class="btn" onclick="openAI('https://elevenlabs.io')">ElevenLabs</div>
-  <div class="btn" onclick="openAI('https://suno.ai')">Suno AI</div>
-</div>
-
-<div class="footer">Powered by RAXZEN</div>
 
 <script>
-/* OPEN LINK */
-function openAI(url){
-  window.open(url,'_blank');
+/* WINDOW-BASED TAB SYSTEM */
+let openTabs = [];
+
+function openAI(url, name) {
+  if(!url.startsWith('http')) url = 'https://' + url;
+  const existingTab = openTabs.find(t => t.url === url && t.windowRef && !t.windowRef.closed);
+  if (existingTab) {
+    existingTab.windowRef.focus();
+    showTabManager();
+    return;
+  }
+  const win = window.open(url, '_blank');
+  if (win) {
+    const id = Date.now();
+    openTabs.push({ id, name, url, windowRef: win });
+    renderTabs();
+    showTabManager();
+    document.getElementById('ai-selector').style.display = 'none';
+  } else {
+    alert("Please allow popups to use the tab system.");
+  }
 }
 
-/* SEARCH FIX */
+function renderTabs() {
+  const tabsDiv = document.getElementById('tabs');
+  tabsDiv.innerHTML = '';
+  openTabs = openTabs.filter(t => t.windowRef && !t.windowRef.closed);
+  openTabs.forEach(tab => {
+    const tabEl = document.createElement('div');
+    tabEl.className = 'tab';
+    tabEl.innerHTML = `
+      <span onclick="focusTab(${tab.id})">${tab.name}</span>
+      <span class="close-tab" onclick="closeTab(${tab.id}, event)">×</span>
+    `;
+    tabsDiv.appendChild(tabEl);
+  });
+}
+
+function focusTab(id) {
+  const tab = openTabs.find(t => t.id === id);
+  if (tab && tab.windowRef && !tab.windowRef.closed) {
+    tab.windowRef.focus();
+  } else {
+    closeTab(id);
+  }
+}
+
+function closeTab(id, event) {
+  if(event) event.stopPropagation();
+  const index = openTabs.findIndex(t => t.id === id);
+  if (index !== -1) {
+    if (openTabs[index].windowRef && !openTabs[index].windowRef.closed) {
+      openTabs[index].windowRef.close();
+    }
+    openTabs.splice(index, 1);
+  }
+  renderTabs();
+  if (openTabs.length === 0) hideTabManager();
+}
+
+function showTabManager() {
+  document.getElementById('tab-manager').style.display = 'flex';
+  document.getElementById('main-ui').style.marginTop = '60px';
+}
+
+function hideTabManager() {
+  document.getElementById('tab-manager').style.display = 'none';
+  document.getElementById('main-ui').style.marginTop = '0';
+}
+
+function addNewTabPrompt() {
+  const url = prompt("Enter AI URL:");
+  if (url) openAI(url, "New Tab");
+}
+
+function goBack() {
+  const panel = document.getElementById('panel');
+  const promptPanel = document.getElementById('promptPanel');
+  if (panel.style.display === 'block') {
+    panel.style.display = 'none';
+  } else if (promptPanel.style.display === 'block') {
+    promptPanel.style.display = 'none';
+  } else {
+    window.history.back();
+  }
+}
+
+/* SEARCH LOGIC */
 const searchBox = document.getElementById("searchBox");
 searchBox.addEventListener("keydown", function(e){
   if(e.key === "Enter"){
     let q = searchBox.value.trim();
     if(!q) return;
-
-    if(q.startsWith("http://") || q.startsWith("https://")){
-      window.open(q,'_blank');
+    document.getElementById('panel').style.display = 'none';
+    document.getElementById('promptPanel').style.display = 'none';
+    let url;
+    if(q.includes('.') && !q.includes(' ')){
+      url = q.startsWith('http') ? q : 'https://' + q;
     } else {
-      window.open(
-        "https://www.google.com/search?q=" + encodeURIComponent(q),
-        "_blank"
-      );
+      url = "https://www.google.com/search?q=" + encodeURIComponent(q);
     }
+    openAI(url, "Search");
   }
 });
 
-/* MODE DATA */
+/* PROMPT DATA */
+const prompts = [
+  { title: "Professional Email Refiner", text: "Rewrite this email to be professional, clear, and polite: [Paste Email]", cat: "writing" },
+  { title: "Article Summarizer", text: "Summarize this article into 5 key bullet points: [Paste Text]", cat: "writing" },
+  { title: "Grammar & Style Fixer", text: "Fix the grammar and improve the flow of this text: [Paste Text]", cat: "writing" },
+  { title: "Code Debugger", text: "Find the bug in this code and explain the fix: [Paste Code]", cat: "coding" },
+  { title: "Explain Code", text: "Explain how this code works step-by-step: [Paste Code]", cat: "coding" },
+  { title: "SQL Query Generator", text: "Write a SQL query to: [Describe Task]", cat: "coding" },
+  { title: "Business SWOT Analysis", text: "Perform a SWOT analysis for this business idea: [Your Idea]", cat: "business" },
+  { title: "Marketing Catchphrase", text: "Create 5 catchy slogans for a product that: [Describe Product]", cat: "business" },
+  { title: "Meeting Agenda Creator", text: "Create a detailed meeting agenda for: [Topic]", cat: "business" },
+  { title: "Study Study Plan", text: "Create a 7-day study schedule to learn: [Subject]", cat: "study" },
+  { title: "Complex Concept Simplified", text: "Explain [Topic] like I am 10 years old.", cat: "study" },
+  { title: "Quiz Generator", text: "Create 5 multiple-choice questions based on this text: [Paste Text]", cat: "study" },
+  { title: "Instagram Caption", text: "Write 3 engaging Instagram captions for a photo about: [Topic]", cat: "social" },
+  { title: "YouTube Script Intro", text: "Write a hook and intro for a YouTube video about: [Topic]", cat: "social" },
+  { title: "Viral Tweet Thread", text: "Create a 5-tweet thread about: [Topic]", cat: "social" }
+];
+
+function renderPrompts(filterCat = 'all') {
+  const list = document.getElementById('promptList');
+  list.innerHTML = '';
+  const filtered = filterCat === 'all' ? prompts : prompts.filter(p => p.cat === filterCat);
+  filtered.forEach(p => {
+    const d = document.createElement('div');
+    d.className = 'prompt-card';
+    d.onclick = () => usePrompt(p.text);
+    d.innerHTML = `<h4>${p.title}</h4><p>${p.text}</p>`;
+    list.appendChild(d);
+  });
+}
+
+function filterP(cat) {
+  document.querySelectorAll('.p-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  renderPrompts(cat);
+}
+
+function togglePromptLibrary() {
+  const pPanel = document.getElementById('promptPanel');
+  const panel = document.getElementById('panel');
+  panel.style.display = 'none';
+  if (pPanel.style.display === 'block') {
+    pPanel.style.display = 'none';
+  } else {
+    pPanel.style.display = 'block';
+    pPanel.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function usePrompt(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const toast = document.getElementById('toast');
+    toast.style.display = 'block';
+    setTimeout(() => toast.style.display = 'none', 2000);
+    const selector = document.getElementById('ai-selector');
+    selector.style.display = 'block';
+    selector.scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+/* DATA */
 const data={
   study:[
-    ["ChatGPT","https://chatgpt.com"],
-    ["Gemini","https://gemini.google.com"],
-    ["Claude","https://claude.ai"],
-    ["Perplexity","https://www.perplexity.ai"]
+    ["ChatGPT","https://chatgpt.com"], ["Gemini","https://gemini.google.com"],
+    ["Claude","https://claude.ai"], ["Perplexity","https://www.perplexity.ai"],
+    ["Khan Academy","https://www.khanacademy.org"], ["WolframAlpha","https://www.wolframalpha.com"]
   ],
   image:[
-    ["Midjourney","https://www.midjourney.com"],
-    ["Leonardo AI","https://leonardo.ai"],
-    ["Pika","https://pika.art"],
-    ["Adobe Firefly","https://firefly.adobe.com"]
+    ["Midjourney","https://www.midjourney.com"], ["Leonardo AI","https://leonardo.ai"],
+    ["Pika","https://pika.art"], ["Adobe Firefly","https://firefly.adobe.com"],
+    ["DALL-E 3","https://openai.com/dall-e-3"], ["Stable Diffusion","https://stablediffusionweb.com"]
   ],
   video:[
-    ["Runway","https://runwayml.com"],
-    ["Pika Video","https://pika.art"]
+    ["Runway","https://runwayml.com"], ["Pika Video","https://pika.art"],
+    ["Sora (OpenAI)","https://openai.com/sora"], ["Luma Dream Machine","https://lumalabs.ai/dream-machine"]
   ],
   coding:[
-    ["ChatGPT","https://chatgpt.com"],
-    ["GitHub Copilot","https://copilot.microsoft.com"],
-    ["DeepSeek","https://www.deepseek.com"]
+    ["ChatGPT","https://chatgpt.com"], ["GitHub Copilot","https://copilot.microsoft.com"],
+    ["DeepSeek","https://www.deepseek.com"], ["Cursor AI","https://www.cursor.com"]
   ],
   voice:[
-    ["ElevenLabs","https://elevenlabs.io"],
-    ["Suno AI","https://suno.ai"],
-    ["PlayHT","https://play.ht"]
+    ["ElevenLabs","https://elevenlabs.io"], ["Suno AI","https://suno.ai"],
+    ["PlayHT","https://play.ht"], ["Murf AI","https://murf.ai"]
   ],
   movie:[
-    ["Telegram (Web)","https://web.telegram.org/a/"],
-    ["BollyFlix","https://bollyflix.do/"],
-    ["Netflix","https://www.netflix.com"],
-    ["Prime Video","https://www.primevideo.com"],
-    ["Disney+ Hotstar","https://www.hotstar.com"]
+    ["Telegram (Web)","https://web.telegram.org/a/"], ["BollyFlix","https://bollyflix.do/"],
+    ["Netflix","https://www.netflix.com"], ["YouTube","https://www.youtube.com"]
   ]
 };
 
-/* SHOW MODE PANEL */
-function show(type){
-  const panel=document.getElementById("panel");
-  const title=document.getElementById("panelTitle");
-  const list=document.getElementById("panelList");
-  list.innerHTML="";
-  title.innerText=type.toUpperCase()+" MODE";
+const popularAIs = [
+  ["Claude", "https://claude.ai"], ["DeepSeek", "https://www.deepseek.com"],
+  ["Copilot", "https://copilot.microsoft.com"], ["Midjourney", "https://www.midjourney.com"],
+  ["Leonardo AI", "https://leonardo.ai"], ["Runway", "https://runwayml.com"],
+  ["Pika", "https://pika.art"], ["ElevenLabs", "https://elevenlabs.io"],
+  ["Suno AI", "https://suno.ai"], ["Character.ai", "https://character.ai"],
+  ["Phind", "https://www.phind.com"], ["You.com", "https://you.com"]
+];
 
-  data[type].forEach(a=>{
-    const d=document.createElement("div");
-    d.className="item";
-    d.innerText=a[0];
-    d.onclick=()=>openAI(a[1]);
+function renderPopular() {
+  const list = document.getElementById('popularList');
+  list.innerHTML = '';
+  popularAIs.forEach(a => {
+    const d = document.createElement("div");
+    d.className = "btn";
+    d.innerText = a[0];
+    d.onclick = () => openAI(a[1], a[0]);
     list.appendChild(d);
   });
+}
 
+function renderCoreGrid() {
+  const coreGrid = document.getElementById('coreGrid');
+  const addBtn = document.getElementById('customAddBtn');
+  const customBtns = coreGrid.querySelectorAll('.custom-btn');
+  customBtns.forEach(b => b.remove());
+  const saved = JSON.parse(localStorage.getItem('customAIs') || '[]');
+  saved.forEach((a, index) => {
+    const d = document.createElement("div");
+    d.className = "btn custom-btn";
+    d.innerHTML = `${a.name}<span class="btn-delete" onclick="deleteCustomAI(${index}, event)">×</span>`;
+    d.onclick = () => openAI(a.url, a.name);
+    coreGrid.insertBefore(d, addBtn);
+  });
+}
+
+function show(type){
+  const panel=document.getElementById("panel");
+  const pPanel = document.getElementById('promptPanel');
+  const title=document.getElementById("panelTitle");
+  const list=document.getElementById("panelList");
+  const customForm = document.getElementById("customForm");
+  list.innerHTML="";
+  customForm.style.display = "none";
+  pPanel.style.display = "none";
+  if (type === 'custom') {
+    title.innerText = "ADD NEW AI";
+    customForm.style.display = "flex";
+  } else {
+    title.innerText=type.toUpperCase()+" MODE";
+    data[type].forEach(a=>{
+      const d=document.createElement("div");
+      d.className="item";
+      d.innerText=a[0];
+      d.onclick=()=>openAI(a[1], a[0]);
+      list.appendChild(d);
+    });
+  }
   panel.style.display="block";
   panel.scrollIntoView({behavior:"smooth"});
 }
+
+function saveCustomAI() {
+  const name = document.getElementById('customName').value.trim();
+  const url = document.getElementById('customUrl').value.trim();
+  if (!name || !url) return alert("Please enter both name and URL");
+  const saved = JSON.parse(localStorage.getItem('customAIs') || '[]');
+  saved.push({ name, url });
+  localStorage.setItem('customAIs', JSON.stringify(saved));
+  document.getElementById('customName').value = '';
+  document.getElementById('customUrl').value = '';
+  document.getElementById('panel').style.display = 'none';
+  renderCoreGrid();
+}
+
+function deleteCustomAI(index, event) {
+  event.stopPropagation();
+  const saved = JSON.parse(localStorage.getItem('customAIs') || '[]');
+  saved.splice(index, 1);
+  localStorage.setItem('customAIs', JSON.stringify(saved));
+  renderCoreGrid();
+}
+
+renderPopular();
+renderCoreGrid();
+renderPrompts();
+setInterval(renderTabs, 3000);
+
 </script>
 <script async="async" data-cfasync="false" src="https://pl28474981.effectivegatecpm.com/6936d2b2d10266108777fef115070b5e/invoke.js"></script>
 <div id="container-6936d2b2d10266108777fef115070b5e"></div>
